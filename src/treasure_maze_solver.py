@@ -1,6 +1,3 @@
-import sys
-sys.path.insert(0,'/content/drive/MyDrive/opencv/aima-python')
-
 import train_model
 import digit_recognition
 import search_algorithms
@@ -29,10 +26,11 @@ def find_start(grid):
 
   return initial_state
 
-if __name__ = "__main__":
+if __name__ == "__main__":
 
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-p", "--path", type=str, help="specify the path to the specific grid")
+	parser.add_argument("number_of_treasures", type=int, help="specify the number of treasures you want to find")
 	parser.add_argument("-a", "--algorithm", type=int, choices=[0, 1],  help="specify the search algorithm you want to use:\n- 0: dijkstra\n- 1: A star")
 	args = parser.parse_args()
 
@@ -67,7 +65,7 @@ if __name__ = "__main__":
 	  grid.append(row)
 
 	# 5. risolvere il problema
-	problem_maze = TreasureMazeProblem(find_start(grid), grid, 3)
+	problem_maze = TreasureMazeProblem(find_start(grid), grid, args.number_of_treasures)
 
 	if args.a:
 		solution = solve_treasure_maze_a_star(problem_maze, calculate_heuristic_grid_b(problem_maze))
