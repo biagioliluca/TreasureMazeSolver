@@ -17,7 +17,6 @@ parser.add_argument('--test_dataset_path', type=Path)
 if __name__ == '__main__':
 	args = parser.parse_args()
 	args.train_dataset_path
-	print(args.train_dataset_path, args.test_dataset_path)
 	if args.train_dataset_path is None and args.test_dataset_path is None:
 		print('Take default dataset from EMNIST...')
 		training_samples, training_labels, test_samples, test_labels = md.get_dataset()
@@ -30,7 +29,10 @@ if __name__ == '__main__':
 			print('Successful import of training dataset!\nImporting test dataset...')
 			test_samples, test_labels = md.import_dataset(test_dataset_path)
 			print('Successful import of test dataset!')
+		except:
+			print('Error: files not found!')
 		
+		else:
 			# create and train nn-model
 			print("Creating and training model...")
 			model = md.create_model(NUM_CLASSES)
@@ -45,11 +47,11 @@ if __name__ == '__main__':
 				score[1]
 				)
 			)
+
 			# save nn-model
 			save = input('Do you want to save this model? [y/n]')
 			if save == 'y' or save == 'Y':
 				model_filename = input("Insert name file (include .h5): ")
 				model.save(os.path.join(MODELS_PATH, model_filename))
 				print('Model saved!')
-		except:
-			print('Error: files not found!')
+			
