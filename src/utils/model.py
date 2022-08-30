@@ -1,16 +1,16 @@
-'''
-    Questo file.py contiene tutte le classi e le funzioni necessarie per la
-    creazione, addestramento e salvataggio della rete neurale.
-'''
 # imports
 from tensorflow import keras
 from keras import models, layers
 from src import digit_recognition
 
-# funzione per creare il modello
+import numpy as np
+import emnist
+import csv
+from utils import labels_table
+
 def create_model(num_classes):
     '''
-        Funzione che istanzia un modello di rete neurale attraverso Keras.
+      Create the nn-model with default structure
     '''
     model = models.Sequential()
 
@@ -21,42 +21,72 @@ def create_model(num_classes):
 
     return model
 
-# valutazione del modello
-def grid_evaluation(model, grid_path, grid_labels):
-  digits, digits_images = extract_and_preprocess(grid_path)
-  classifieds = []
-  print(grid_labels)
-  classified = 0
-  for i in range(len(digits)):    
-    predict_digit = model.predict(digits[i:i+1])
-    class_digit = np.argmax(predict_digit,axis=1)
+
+def extract_and_convert_samples(data, labels):
+  '''
+    Extract the selected data and respective labels using choosen labels
+    (labels_table) for our nn-model
+  '''
+  sub_data = []
+  sub_labels = []
+
+  for i in range(len(data)):
+      if labels[i] in labels.keys():
+          sub_data.append(data[i])
+          sub_labels.append(labels[i])
+
+  sub_data = np.array(sub_data)
+  sub_labels = np.array(sub_labels)
+
+  for i in range(len(sub_labels)):
+    sub_labels[i] = labels_table[sub_labels[i]]
+
+  return sub_data, sub_labels
+  
+def import_dataset(filename):
+  '''
+    Import dataset from a saved csv file
+  '''
+  csv_file = open(filename, 'r')
+  csv_reader = csv.reader(csv_file)
+
+  data = []
+  labels = []
+  for row in csv_reader:
+    entry = [eval(i) for i in row]
+    labels.append(entry[0])
+    data.append(entry[1:])
+  return np.array(data), np.array(labels)
+
+def export_dataset(filename, data, labels):
+  '''
+    Export dataset on a csv file
+  '''
+  csv_file = open(filename, 'w')
+  csv_writer = csv.writer(csv_file)
+
+  for entry, label in zip(data, labels):
+    x = np.insert(entry, 0, label)
+    csv_writer.writerow(x)
+  csv_file.close()
     
-    if class_digit == grid_labels[i]:
-      classified += 1
-    #else:
-      #if grid_labels[i] == 0:
-        #print("sono qui")
-        #predict_digit = model_s.predict(digits[i:i+1])
-        #class_digit = np.argmax(predict_digit,axis=1)
-        #if class_digit == grid_labels[i]:
-        #  classified += 1
-    plt.imshow(cv2.cvtColor(digits_images[i], cv2.COLOR_RGB2BGR))
-    plt.show()
-    print(class_digit)
-      
-      #print("class_digit: {} | predict_digit: {}".format(class_digit, predict_digit))
-    classifieds.append(class_digit)
-  print(classifieds)
-  return classified / len(grid_labels)
+def get_dataset():
+  '''
+    Extract the datasets from EMNIST and select and pre-process them, returning 
+    them (samples + labels)
+  '''
+  pre_training_images, pre_training_labels = emnist.extract_training_samples('balanced')
+  pre_test_images, pre_test_labels = emnist.extract_test_samples('balanced')
 
+	# extraction of only the interest entries from the dataset and convert with our labels
+  training_images, training_labels = extract_and_convert_samples(pre_training_images, pre_training_labels)
+  test_images, test_labels = extract_and_convert_samples(pre_test_images, pre_test_labels)
 
-# funzione per addestrare il modello e salvarlo
+	# pre-processing of the selected dataset
+  training_images = training_images.reshape(training_images.shape[0], 784)
+  test_images = test_images.reshape(test_images.shape[0], 784)
 
+  training_images = training_images.astype("float32")/255
+  test_images = test_images.astype("float32")/255
 
-# funzione per salvarlo (necessario?)
-
-
-# funzione per addestrare il modello
-
-
-#
+  return training_images, training_labels, test_images, test_labels
