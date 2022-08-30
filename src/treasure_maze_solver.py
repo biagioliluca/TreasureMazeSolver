@@ -1,8 +1,13 @@
-import train_model
-import digit_recognition
-import search_algorithms
+from digit_recognition import *
+from search_algorithms import *
 import argparse
+#from pathlib import Path
+import sys
+sys.path.append('../aima-python')
+import search
 import __init__
+print(labels_to_digit[0])
+
 
 def get_value_from_label(table, value):
 
@@ -27,9 +32,8 @@ def find_start(grid):
   return initial_state
 
 if __name__ == "__main__":
-
 	parser = argparse.ArgumentParser()
-	parser.add_argument("-p", "--path", type=str, help="specify the path to the specific grid")
+	parser.add_argument("-p", "--path", type=Path, help="specify the path to the specific grid")
 	parser.add_argument("number_of_treasures", type=int, help="specify the number of treasures you want to find")
 	parser.add_argument("-a", "--algorithm", type=int, choices=[0, 1],  help="specify the search algorithm you want to use:\n- 0: dijkstra\n- 1: A star")
 	args = parser.parse_args()
@@ -69,7 +73,7 @@ if __name__ == "__main__":
 
 	if args.a:
 		solution = solve_treasure_maze_a_star(problem_maze, calculate_heuristic_grid_b(problem_maze))
-	else 
+	else:
 		solution = solve_treasure_maze_dijkstra(problem_maze)
 
 	print(solution)

@@ -1,7 +1,14 @@
 from tensorflow.python.ops.init_ops import Zeros
 import math
 import numpy as np
+
+import sys
+sys.path.append('../aima-python')
 from search import Problem
+
+from search import Node
+from utils import PriorityQueue
+from numpy import array_equal
 
 # hyp: state is an tuple with 2 elements: (row, column)
 
@@ -118,10 +125,6 @@ def calculate_heuristic_grid(treasure_maze_problem):
       heuristic_grid.append(row)
 
   return heuristic_grid  
-
-from search import Node
-from utils import PriorityQueue
-from numpy import array_equal
 
 def is_in(node, queue):
   if len(queue.heap) == 0:
