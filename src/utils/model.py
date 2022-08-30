@@ -1,11 +1,12 @@
 # imports
 from tensorflow import keras
 from keras import models, layers
-from src import digit_recognition
+
 
 import numpy as np
 import emnist
 import csv
+
 from utils import labels_table
 
 def create_model(num_classes):
@@ -52,11 +53,13 @@ def import_dataset(filename):
 
   data = []
   labels = []
+  j = 0
   for row in csv_reader:
     entry = [eval(i) for i in row]
     labels.append(entry[0])
     data.append(entry[1:])
-  return np.array(data), np.array(labels)
+  data = np.array(data).astype("float32")/255
+  return data, np.array(labels)
 
 def export_dataset(filename, data, labels):
   '''
