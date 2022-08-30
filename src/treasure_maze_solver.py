@@ -5,23 +5,14 @@ import train_model
 import digit_recognition
 import search_algorithms
 import argparse
+import __init__
 
 def get_value_from_label(table, value):
-
-  labels = {
-      1: '1',
-      2: '2',
-      3: '3',
-      4: '4',
-      28: 'S',
-      29: 'T',
-      33: 'X'
-   }
 
   keys = list(table.keys())
   values = list(table.values())
   i = values.index(value)
-  return labels[keys[i]]
+  return labels_to_digit[keys[i]]
 
 def find_start(grid):
   start_found = False
