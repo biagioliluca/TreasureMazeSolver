@@ -1,5 +1,5 @@
-from src import digit_recognition
-from src import search_algorithms
+
+
 labels_to_digit = {
       1: '1',
       2: '2',

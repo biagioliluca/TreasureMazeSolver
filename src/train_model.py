@@ -1,5 +1,5 @@
-from utils import model as md
-from utils import NUM_CLASSES
+from nn_utils import model as md
+from nn_utils import NUM_CLASSES
 
 import argparse
 from pathlib import Path

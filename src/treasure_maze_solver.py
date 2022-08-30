@@ -1,11 +1,11 @@
-from digit_recognition import *
-from search_algorithms import *
+import digit_recognition 
+import search_algorithms 
 import argparse
 #from pathlib import Path
 import sys
 sys.path.append('../aima-python')
 import search
-import __init__
+from src import labels_to_digit
 print(labels_to_digit[0])
 
 
