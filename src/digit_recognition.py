@@ -1,7 +1,11 @@
 import sys
-import numpy
+import numpy as np
+import math
+from matplotlib import pyplot as plt
+import cv2
+import keras
 
-numpy.set_printoptions(threshold=sys.maxsize)
+np.set_printoptions(threshold=sys.maxsize)
 
 def get_digits(image_path):
   img = cv2.imread(image_path)

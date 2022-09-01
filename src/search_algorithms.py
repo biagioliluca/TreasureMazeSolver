@@ -2,9 +2,14 @@ from tensorflow.python.ops.init_ops import Zeros
 import math
 import numpy as np
 
+import os
 import sys
-sys.path.append('../aima-python')
+import inspect
+parentdir = os.path.dirname(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
+sys.path.insert(0, parentdir + '/aima-python/') 
 from search import Problem
+
+
 
 from search import Node
 from utils import PriorityQueue

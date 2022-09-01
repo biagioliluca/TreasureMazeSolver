@@ -5,7 +5,7 @@ import argparse
 from pathlib import Path
 import os
 
-MODELS_PATH = os.path.join('..', 'models')
+MODELS_PATH = os.path.join(Path(__file__).resolve().parent.parent, 'models')
 
 EPOCHS = 15
 BATCH_SIZE = 64
@@ -51,7 +51,7 @@ if __name__ == '__main__':
 			# save nn-model
 			save = input('Do you want to save this model? [y/n]')
 			if save == 'y' or save == 'Y':
-				model_filename = input("Insert name file (include .h5): ")
+				model_filename = "nn_model.h5"
 				model.save(os.path.join(MODELS_PATH, model_filename))
 				print('Model saved!')
 			

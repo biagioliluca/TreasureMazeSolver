@@ -1,12 +1,20 @@
 import digit_recognition 
-import search_algorithms 
+from search_algorithms import *
 import argparse
-#from pathlib import Path
-import sys
-sys.path.append('../aima-python')
+from pathlib import Path
+import keras
+import numpy as np
+import math
+
 import search
-from src import labels_to_digit
-print(labels_to_digit[0])
+
+import sys
+sys.path.insert(0, '.')
+
+from src import *
+from digit_recognition import extract_and_preprocess
+from train_model import *
+from nn_utils import labels_table
 
 
 def get_value_from_label(table, value):
@@ -29,6 +37,9 @@ def find_start(grid):
         initial_state = (i,j) 
         start_found = True
 
+  if initial_state == (-1,-1):
+  	raise Exception("ERROR: There is no start point")
+
   return initial_state
 
 if __name__ == "__main__":
@@ -40,8 +51,8 @@ if __name__ == "__main__":
 
 	# 1. prendere in input un'immagine
 	try:
-		image_name = args.p
-		if args.p == None:
+		image_name = str(args.path)
+		if image_name == None:
 			raise Exception("Please choose a grid")
 	except:
 		raise Exception("There is no path as {}".format(args.p))
@@ -50,14 +61,14 @@ if __name__ == "__main__":
 	digits, _ = extract_and_preprocess(image_name)
 
 	# 3. caricare il modello
-	loaded_model = keras.models.load_model(train_model.save_dataset_path + "char_recognition_model.h5")
+	loaded_model = keras.models.load_model(os.path.join(MODELS_PATH, "nn_model.h5"))
 
 	# 4. creare la griglia dei valori predetti
 	predicted = []
 	for i in range(len(digits)):    
-	    predict_digit = model.predict(digits[i:i+1])
+	    predict_digit = loaded_model.predict(digits[i:i+1])
 	    class_digit = np.argmax(predict_digit,axis=1)
-	    predicted.append(get_value_from_label(table_labels, class_digit))
+	    predicted.append(get_value_from_label(labels_table, class_digit))
 
 	n = int(math.sqrt(len(digits)))
 	grid = []
@@ -71,7 +82,7 @@ if __name__ == "__main__":
 	# 5. risolvere il problema
 	problem_maze = TreasureMazeProblem(find_start(grid), grid, args.number_of_treasures)
 
-	if args.a:
+	if args.algorithm:
 		solution = solve_treasure_maze_a_star(problem_maze, calculate_heuristic_grid_b(problem_maze))
 	else:
 		solution = solve_treasure_maze_dijkstra(problem_maze)
