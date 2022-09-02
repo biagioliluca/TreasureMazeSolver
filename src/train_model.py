@@ -16,32 +16,32 @@ parser.add_argument('--test_dataset_path', type=Path, help="enter test dataset p
 
 if __name__ == '__main__':
 	args = parser.parse_args()
-	args.train_dataset_path
-	if args.train_dataset_path is None:
+	create_dataset(str(args.train_dataset_path), str(args.test_dataset_path))
+
+def create_dataset(train_ds_path = "", test_ds_path = ""):
+	if train_ds_path == "":
 		print('Take default training dataset from EMNIST...')
 		training_samples, training_labels = md.get_training_dataset()
 	else:
-		training_dataset_path = args.train_dataset_path
 		try:
 			print('Importing training dataset...')
-			training_samples, training_labels = md.import_dataset(training_dataset_path)
+			training_samples, training_labels = md.import_dataset(train_ds_path)
 			print('Successful import of training dataset!')
 		except:
-			print('Error: files not found!')
+			raise Exception("ERROR: file not found")
 
-	if args.test_dataset_path is None:
+	if test_ds_path == "":
 		print('Take default test dataset from EMNIST...')
 		test_samples, test_labels = md.get_test_dataset()
 	else:
-		test_dataset_path = args.test_dataset_path
 		try:
 			print('Importing test dataset...')
-			test_samples, test_labels = md.import_dataset(test_dataset_path)
+			test_samples, test_labels = md.import_dataset(test_ds_path)
 			print('Successful import of test dataset!')
 		except:
 			print('Error: files not found!')
 
-		
+			
 	# create and train nn-model
 	print("Creating and training model...")
 	model = md.create_model(NUM_CLASSES)

@@ -1,5 +1,6 @@
 import digit_recognition 
 from search_algorithms import *
+from train_model import *
 import argparse
 from pathlib import Path
 import keras
@@ -25,22 +26,22 @@ def get_value_from_label(table, value):
   return labels_to_digit[keys[i]]
 
 def find_start(grid):
-	start_found = False
-	initial_state = (-1,-1)
-	for i in range(len(grid)):
-	  	for j in range(len(grid[i])): 
+  start_found = False
+  initial_state = (-1,-1)
+  for i in range(len(grid)):
+    for j in range(len(grid[i])):
+      
+      if grid[i][j] == 'S':
+      
+        if start_found:
+          raise Exception("ERROR! Found more than 1 start point: you can only have ONE start point")
+        initial_state = (i,j) 
+        start_found = True
 
-	        if grid[i][j] == 'S':
+  if initial_state == (-1,-1):
+  	raise Exception("ERROR: There is no start point")
 
-		        if start_found:
-		        	raise Exception("ERROR! Found more than 1 start point: you can only have ONE start point")
-		        initial_state = (i,j) 
-		        start_found = True
-
-	if initial_state == (-1,-1):
-	  	raise Exception("ERROR: There is no start point")
-
-	return initial_state
+  return initial_state
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
@@ -62,13 +63,24 @@ if __name__ == "__main__":
 	digits, _ = extract_and_preprocess(image_name)
 
 	# 3. caricare il modello
+	create_new_model = ""
 	while create_new_model != 'y' and create_new_model != 'Y' and create_new_model != 'n' and create_new_model != 'N':
 		# save nn-model
 		create_new_model = input('Do you want to create a new model? [y/n]')
 		if create_new_model == 'y' or create_new_model == 'Y':
-			### CALL TRAIN MODEL
-			print('Model created!')
-			#break
+			dataset_found_flag = False
+			while dataset_found_flag == False:
+				print("Please insert dataset paths if you want to import them, otherwise leave it blank")
+				input_train_ds = input("Insert training dataset path: ")
+				input_test_ds = input("Insert test dataset path: ")
+				try:
+					create_dataset(input_train_ds, input_test_ds)
+					print('Model created!')
+					dataset_found_flag = True
+					break
+				except:
+					print("Error: file dataset not found, try again")
+
 		elif create_new_model == 'n' or create_new_model == 'N':
 			loaded_model = keras.models.load_model(os.path.join(MODELS_PATH, "nn_model.h5"))
 			break
@@ -88,7 +100,7 @@ if __name__ == "__main__":
 	for i in range(n):
 		row =[]
 		for j in range(n):
-	    	row.append(predicted[(i*n)+j])
+	  		row.append(predicted[(i*n)+j])
 		grid.append(row)
 
 	# 5. risolvere il problema

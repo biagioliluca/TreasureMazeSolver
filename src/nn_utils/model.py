@@ -32,7 +32,7 @@ def extract_and_convert_samples(data, labels):
   sub_labels = []
 
   for i in range(len(data)):
-      if labels[i] in labels.keys():
+      if labels[i] in labels_table.keys():
           sub_data.append(data[i])
           sub_labels.append(labels[i])
 
