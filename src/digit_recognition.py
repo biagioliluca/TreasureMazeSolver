@@ -3,7 +3,7 @@ import numpy as np
 import math
 from matplotlib import pyplot as plt
 import cv2
-import keras
+
 
 np.set_printoptions(threshold=sys.maxsize)
 

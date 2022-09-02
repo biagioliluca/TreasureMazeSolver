@@ -72,24 +72,30 @@ def export_dataset(filename, data, labels):
     x = np.insert(entry, 0, label)
     csv_writer.writerow(x)
   csv_file.close()
+
     
-def get_dataset():
-  '''
-    Extract the datasets from EMNIST and select and pre-process them, returning 
-    them (samples + labels)
-  '''
+'''
+  Extract the datasets from EMNIST and select and pre-process them, returning 
+  them (samples and labels)
+'''
+def get_training_dataset():
+
   pre_training_images, pre_training_labels = emnist.extract_training_samples('balanced')
-  pre_test_images, pre_test_labels = emnist.extract_test_samples('balanced')
-
-	# extraction of only the interest entries from the dataset and convert with our labels
+  # extraction of only the interest entries from the dataset and convert with our labels
   training_images, training_labels = extract_and_convert_samples(pre_training_images, pre_training_labels)
-  test_images, test_labels = extract_and_convert_samples(pre_test_images, pre_test_labels)
-
-	# pre-processing of the selected dataset
+  # pre-processing of the selected dataset
   training_images = training_images.reshape(training_images.shape[0], 784)
-  test_images = test_images.reshape(test_images.shape[0], 784)
-
   training_images = training_images.astype("float32")/255
+
+  return training_images, training_labels
+
+def get_test_dataset():
+
+  pre_test_images, pre_test_labels = emnist.extract_test_samples('balanced')
+  # extraction of only the interest entries from the dataset and convert with our labels
+  test_images, test_labels = extract_and_convert_samples(pre_test_images, pre_test_labels)
+  # pre-processing of the selected dataset
+  test_images = test_images.reshape(test_images.shape[0], 784)
   test_images = test_images.astype("float32")/255
 
-  return training_images, training_labels, test_images, test_labels
+  return test_images, test_labels

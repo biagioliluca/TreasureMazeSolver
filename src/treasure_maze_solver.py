@@ -25,22 +25,22 @@ def get_value_from_label(table, value):
   return labels_to_digit[keys[i]]
 
 def find_start(grid):
-  start_found = False
-  initial_state = (-1,-1)
-  for i in range(len(grid)):
-    for j in range(len(grid[i])): 
+	start_found = False
+	initial_state = (-1,-1)
+	for i in range(len(grid)):
+	  	for j in range(len(grid[i])): 
 
-      if grid[i][j] == 'S':
+	        if grid[i][j] == 'S':
 
-        if start_found:
-          raise Exception("ERROR! Found more than 1 start point: you can only have ONE start point")
-        initial_state = (i,j) 
-        start_found = True
+		        if start_found:
+		        	raise Exception("ERROR! Found more than 1 start point: you can only have ONE start point")
+		        initial_state = (i,j) 
+		        start_found = True
 
-  if initial_state == (-1,-1):
-  	raise Exception("ERROR: There is no start point")
+	if initial_state == (-1,-1):
+	  	raise Exception("ERROR: There is no start point")
 
-  return initial_state
+	return initial_state
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
@@ -58,10 +58,22 @@ if __name__ == "__main__":
 		raise Exception("There is no path as {}".format(args.p))
 
 	# 2. convertire tale immagine in una matrice numerica
+	print("Extracting digits from grid...")
 	digits, _ = extract_and_preprocess(image_name)
 
 	# 3. caricare il modello
-	loaded_model = keras.models.load_model(os.path.join(MODELS_PATH, "nn_model.h5"))
+	while create_new_model != 'y' and create_new_model != 'Y' and create_new_model != 'n' and create_new_model != 'N':
+		# save nn-model
+		create_new_model = input('Do you want to create a new model? [y/n]')
+		if create_new_model == 'y' or create_new_model == 'Y':
+			### CALL TRAIN MODEL
+			print('Model created!')
+			#break
+		elif create_new_model == 'n' or create_new_model == 'N':
+			loaded_model = keras.models.load_model(os.path.join(MODELS_PATH, "nn_model.h5"))
+			break
+		else:
+			print("Please insert y/Y for yes or n/N for no")
 
 	# 4. creare la griglia dei valori predetti
 	predicted = []
@@ -74,10 +86,10 @@ if __name__ == "__main__":
 	grid = []
 
 	for i in range(n):
-	  row =[]
-	  for j in range(n):
-	    row.append(predicted[(i*n)+j])
-	  grid.append(row)
+		row =[]
+		for j in range(n):
+	    	row.append(predicted[(i*n)+j])
+		grid.append(row)
 
 	# 5. risolvere il problema
 	problem_maze = TreasureMazeProblem(find_start(grid), grid, args.number_of_treasures)
