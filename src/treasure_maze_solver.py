@@ -82,6 +82,7 @@ if __name__ == "__main__":
 					print("Error: file dataset not found, try again")
 
 		elif create_new_model == 'n' or create_new_model == 'N':
+			loaded_model = None
 			loaded_model = keras.models.load_model(os.path.join(MODELS_PATH, "nn_model.h5"))
 			break
 		else:
