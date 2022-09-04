@@ -56,7 +56,7 @@ def create_dataset(train_ds_path = "", test_ds_path = ""):
 		score[1]
 		)
 	)
-
+	save = ''
 	while save != 'y' and save != 'Y' and save != 'n' and save != 'N':
 		# save nn-model
 		save = input('Do you want to save this model? [y/n]')
