@@ -4,7 +4,6 @@ import math
 from matplotlib import pyplot as plt
 import cv2
 
-
 np.set_printoptions(threshold=sys.maxsize)
 
 def get_digits(image_path):

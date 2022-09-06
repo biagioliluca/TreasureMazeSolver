@@ -6,7 +6,7 @@ import os
 import sys
 import inspect
 parentdir = os.path.dirname(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe()))))
-sys.path.insert(0, parentdir + '/aima-python/') 
+sys.path.insert(0, parentdir + '/aima-python') 
 from search import Problem
 
 

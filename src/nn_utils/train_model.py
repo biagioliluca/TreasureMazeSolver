@@ -69,3 +69,4 @@ def create_dataset(train_ds_path = "", test_ds_path = ""):
 			break
 		else:
 			print("Please insert y/Y for yes or n/N for no")
+	return model

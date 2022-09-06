@@ -1,11 +1,6 @@
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+print(sys.path)
 
 
-labels_to_digit = {
-      1: '1',
-      2: '2',
-      3: '3',
-      4: '4',
-      28: 'S',
-      29: 'T',
-      33: 'X'
-   }
