@@ -1,6 +1,6 @@
-import digit_recognition 
-from search_algorithms import *
-from train_model import *
+from nn_utils.digit_recognition import extract_and_preprocess 
+from search_utils.search_algorithms import *
+from nn_utils.train_model import create_dataset, MODELS_PATH
 import argparse
 from pathlib import Path
 import keras
@@ -8,14 +8,7 @@ import numpy as np
 import math
 
 import search
-
-import sys
-sys.path.insert(0, '.')
-
-from src import *
-from digit_recognition import extract_and_preprocess
-from train_model import *
-from nn_utils import labels_table
+from nn_utils import *
 
 
 def get_value_from_label(table, value):
@@ -26,23 +19,20 @@ def get_value_from_label(table, value):
   return labels_to_digit[keys[i]]
 
 def find_start(grid):
-  start_found = False
-  initial_state = (-1,-1)
-  for i in range(len(grid)):
-    for j in range(len(grid[i])):
-      
-      if grid[i][j] == 'S':
-      
-        if start_found:
-          raise Exception("ERROR! Found more than 1 start point: you can only have ONE start point")
-        initial_state = (i,j) 
-        start_found = True
-
-  if initial_state == (-1,-1):
-  	raise Exception("ERROR: There is no start point")
-
-  return initial_state
-
+	start_found = False
+	initial_state = (-1,-1)
+	for i in range(len(grid)):
+		for j in range(len(grid[i])):
+			if grid[i][j] == 'S':
+				if start_found:
+					raise Exception("ERROR! Found more than 1 start point: you can only have ONE start point")
+				initial_state = (i,j) 
+				start_found = True
+		
+	if initial_state == (-1,-1):
+		raise Exception("ERROR: There is no start point")
+	return initial_state
+		
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-p", "--path", type=Path, help="specify the path to the specific grid")
@@ -74,7 +64,7 @@ if __name__ == "__main__":
 				input_train_ds = input("Insert training dataset path: ")
 				input_test_ds = input("Insert test dataset path: ")
 				try:
-					create_dataset(input_train_ds, input_test_ds)
+					model = create_dataset(input_train_ds, input_test_ds)
 					print('Model created!')
 					dataset_found_flag = True
 					break
@@ -82,8 +72,7 @@ if __name__ == "__main__":
 					print("Error: file dataset not found, try again")
 
 		elif create_new_model == 'n' or create_new_model == 'N':
-			loaded_model = None
-			loaded_model = keras.models.load_model(os.path.join(MODELS_PATH, "nn_model.h5"))
+			model = keras.models.load_model(os.path.join(MODELS_PATH, "nn_model.h5"))
 			break
 		else:
 			print("Please insert y/Y for yes or n/N for no")
@@ -91,9 +80,9 @@ if __name__ == "__main__":
 	# 4. creare la griglia dei valori predetti
 	predicted = []
 	for i in range(len(digits)):    
-	    predict_digit = loaded_model.predict(digits[i:i+1])
-	    class_digit = np.argmax(predict_digit,axis=1)
-	    predicted.append(get_value_from_label(labels_table, class_digit))
+		predict_digit = model.predict(digits[i:i+1])
+		class_digit = np.argmax(predict_digit,axis=1)
+		predicted.append(get_value_from_label(labels_table, class_digit))
 
 	n = int(math.sqrt(len(digits)))
 	grid = []
@@ -101,14 +90,14 @@ if __name__ == "__main__":
 	for i in range(n):
 		row =[]
 		for j in range(n):
-	  		row.append(predicted[(i*n)+j])
+			row.append(predicted[(i*n)+j])
 		grid.append(row)
 
 	# 5. risolvere il problema
 	problem_maze = TreasureMazeProblem(find_start(grid), grid, args.number_of_treasures)
 
 	if args.algorithm:
-		solution = solve_treasure_maze_a_star(problem_maze, calculate_heuristic_grid_b(problem_maze))
+		solution = solve_treasure_maze_a_star(problem_maze, calculate_heuristic_grid(problem_maze))
 	else:
 		solution = solve_treasure_maze_dijkstra(problem_maze)
 
