@@ -2,7 +2,6 @@
 from tensorflow import keras
 from keras import models, layers
 
-
 import numpy as np
 import emnist
 import csv
@@ -59,7 +58,7 @@ def import_dataset(filename):
     entry = [eval(i) for i in row]
     labels.append(entry[0])
     data.append(entry[1:])
-  data = np.array(data).astype("float32")/255
+  data = np.array(data).astype('float32')/255
   return data, np.array(labels)
 
 def export_dataset(filename, data, labels):
@@ -75,18 +74,18 @@ def export_dataset(filename, data, labels):
   csv_file.close()
 
     
-'''
+
+def get_training_dataset():
+  '''
   Extract the datasets from EMNIST and select and pre-process them, returning 
   them (samples and labels)
-'''
-def get_training_dataset():
-
+  '''
   pre_training_images, pre_training_labels = emnist.extract_training_samples('balanced')
   # extraction of only the interest entries from the dataset and convert with our labels
   training_images, training_labels = extract_and_convert_samples(pre_training_images, pre_training_labels)
   # pre-processing of the selected dataset
   training_images = training_images.reshape(training_images.shape[0], 784)
-  training_images = training_images.astype("float32")/255
+  training_images = training_images.astype('float32')/255
 
   return training_images, training_labels
 
@@ -97,6 +96,6 @@ def get_test_dataset():
   test_images, test_labels = extract_and_convert_samples(pre_test_images, pre_test_labels)
   # pre-processing of the selected dataset
   test_images = test_images.reshape(test_images.shape[0], 784)
-  test_images = test_images.astype("float32")/255
+  test_images = test_images.astype('float32')/255
 
   return test_images, test_labels
