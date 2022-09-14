@@ -102,4 +102,11 @@ if __name__ == '__main__':
 		solution = solve_treasure_maze_a_star(problem_maze)
 	else:
 		solution = solve_treasure_maze_dijkstra(problem_maze)
-	print(solution)
+	# 6. print the solution
+	print('-' * 80, 'Solution:')
+	string = ''
+	for sub_solution in solution:
+		string.append(sub_solution[0])
+		for action in sub_solution[1:]:
+			string.append('->' + action)
+	print(string)
