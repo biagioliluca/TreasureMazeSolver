@@ -13,7 +13,7 @@ def get_digits(image_path):
 
   # 1. get the negative image
   gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-  _, img_th = cv2.threshold(gray,127,255, cv2.THRESH_BINARY+ cv2.THRESH_OTSU)
+  _, img_th = cv2.threshold(gray,127,255, cv2.THRESH_BINARY+ cv2.THRESH_OTSU) 
   negative = 255 - img_th
 
   # 2. find the grid contour and crop the image to zoom it
@@ -94,7 +94,7 @@ def extract_and_preprocess(image_path):
       processed_digit = cv2.resize(cropped_rect,(20,20))
       processed_digit = cv2.copyMakeBorder(processed_digit, 4, 4, 4, 4, cv2.BORDER_CONSTANT, value=(0,0,0))
       # apply threshold to delete nuances caused by resing
-      _ , processed_digit = cv2.threshold(processed_digit,127,255, cv2.THRESH_BINARY+ cv2.THRESH_OTSU)
+      #_ , processed_digit = cv2.threshold(processed_digit,127,255, cv2.THRESH_BINARY+ cv2.THRESH_OTSU)
 
       digit_list.append(processed_digit)
 

@@ -9,6 +9,8 @@ from pathlib import Path
 import keras
 import numpy as np
 import math
+from matplotlib import pyplot as plt
+
 
 def get_value_from_label(table, value):
 	'''
@@ -28,8 +30,8 @@ def find_start(grid):
 	for i in range(len(grid)):
 		for j in range(len(grid[i])):
 			if grid[i][j] == 'S':
-				if start_found:
-					raise Exception('ERROR! Found more than 1 start point: you can only have ONE start point')
+				#if start_found:
+				#	raise Exception('ERROR! Found more than 1 start point: you can only have ONE start point')
 				initial_state = (i,j) 
 				start_found = True
 		
@@ -54,7 +56,7 @@ if __name__ == '__main__':
 
 	# 2. convert the image into a numeric matrix
 	print('Extracting digits from grid...')
-	digits, _ = extract_and_preprocess(image_name)
+	digits, image_value = extract_and_preprocess(image_name)
 
 	# 3. load the model or create a new one
 	create_new_model = ''
@@ -87,6 +89,11 @@ if __name__ == '__main__':
 		class_digit = np.argmax(predict_digit,axis=1)
 		predicted.append(get_value_from_label(labels_table, class_digit))
 
+		# print image with relative predicted value
+		plt.imshow(image_value[i])
+		plt.show()
+		print(class_digit)
+
 	n = int(math.sqrt(len(digits)))
 	grid = []
 
@@ -106,10 +113,10 @@ if __name__ == '__main__':
 	flag=True
 	for sub_list in solution:
   		if flag == False:
-    		string += '->'
+  			string += '->'
   		string += sub_list[0]
   		flag=False
   		for action in sub_list[1:]:
-    		string += '->' + action
+  			string += '->' + action
 
 	print(string)  

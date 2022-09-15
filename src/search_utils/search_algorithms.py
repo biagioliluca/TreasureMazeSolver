@@ -161,7 +161,7 @@ def dijkstra(problem, f):
       if not any(child.state[0] == i and child.state[1] == j for (i,j) in explored) and not is_in(child, frontier):
         frontier.append(child)
       elif is_in(child, frontier):
-        if g(child) < frontier[child]:
+        if f(child) < frontier[child]:
           del frontier[child]
           frontier.append(child)
 

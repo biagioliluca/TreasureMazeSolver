@@ -2,8 +2,7 @@
 import sys
 import os
 from pathlib import Path
-
-sys.path.insert(0, Path(__file__).resolve().parent)
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 # constants
 labels_table = {

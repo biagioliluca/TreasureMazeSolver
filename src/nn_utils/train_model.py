@@ -9,7 +9,7 @@ from tensorflow.keras.optimizers import SGD
 
 MODELS_PATH = os.path.join(Path(__file__).resolve().parent.parent.parent, 'models')
 
-EPOCHS = 60
+EPOCHS = 16
 BATCH_SIZE = 64
 LEARNING_R = 0.1
 DECAY_R = LEARNING_R / EPOCHS
@@ -55,10 +55,10 @@ def create_and_train_model(train_ds_path ='', test_ds_path =''):
 	model = md.create_model(NUM_CLASSES)
 
 	# define the optimizer
-	sgd = SGD(learning_rate=LEARNING_R, momentum=MOMENTUM, decay=DECAY_R, nesterov=False)
+	#sgd = SGD(learning_rate=LEARNING_R, momentum=MOMENTUM, decay=DECAY_R, nesterov=False)
 
 	# compile and train model
-	model.compile(loss ="sparse_categorical_crossentropy", optimizer =sgd, metrics=["accuracy"])
+	model.compile(loss ="sparse_categorical_crossentropy", optimizer ='adam', metrics=["accuracy"])
 	history = model.fit(training_samples, training_labels, batch_size= BATCH_SIZE, epochs= EPOCHS)
 	score = model.evaluate(test_samples, test_labels, verbose=1)
 
