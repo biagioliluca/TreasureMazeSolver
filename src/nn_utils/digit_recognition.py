@@ -48,7 +48,14 @@ def get_digits(image_path):
       detected_rect = negative_cropped[y:y+h,x:x+w]
       if (cv2.countNonZero(detected_rect) == 0) or (((negative_cropped.shape[0]*negative_cropped.shape[1]) / (w*h)) > 6000):
         x,y,w,h = cv2.boundingRect(contours[hierarchy[0][i][3]])
+
+      if [x,y,w,h] in rects:
+        continue
       
+      # print single digits
+      #plt.imshow(img_copy[y:y+h, x:x+w])
+      #plt.show()
+
       cv2.rectangle(img_copy,(x,y),(x+w,y+h),(255,0 ,0),3)
       rects.append([x,y,w,h])
       num_digits+=1
@@ -56,6 +63,10 @@ def get_digits(image_path):
   # check if all digits get dected
   if int(math.sqrt(num_digits)) ** 2 != num_digits:
     raise Exception("Something's wrong with the detection")
+
+  # print image with contours
+  #plt.imshow(img_copy)
+  #plt.show()
 
   # 6. sort digits rectangles from left to right, from up to down
   sorted_grid=[]

@@ -172,24 +172,30 @@ def a_star(problem, h):
   return dijkstra(problem, lambda node: node.path_cost + h[node.state[0]][node.state[1]])
 
 
+def print_grid(grid):
+  for row in grid:
+    print ('  '.join(map(str, row)))
+
+
 def solve_treasure_maze_dijkstra(treasure_maze_problem):
   flag = False
   f = lambda node: node.path_cost
   tot_solution = []
+  print_grid(treasure_maze_problem.grid)
   while not flag:
     flag, solution = dijkstra(treasure_maze_problem, f)
     if solution is None:
       print('ERROR: can\'t find {} treasures'.format(treasure_maze_problem.k))
       break
     treasure_maze_problem.update_grid(solution)
-    for row in treasure_maze_problem.grid:
-      print("| {} {} {} {} |\n".format(row[0], row[1], row[2], row[3]))
+    print_grid(treasure_maze_problem.grid)
     tot_solution.append(solution)
   return tot_solution
 
 def solve_treasure_maze_a_star(treasure_maze_problem):
   flag = False
   tot_solution = []
+  print_grid(treasure_maze_problem.grid)
   while not flag:
     h = calculate_heuristic_grid(treasure_maze_problem)
     flag, solution = a_star(treasure_maze_problem, h)
@@ -197,8 +203,7 @@ def solve_treasure_maze_a_star(treasure_maze_problem):
       print('ERROR: can\'t find {} treasures'.format(treasure_maze_problem.k))
       break
     treasure_maze_problem.update_grid(solution)
-    for row in treasure_maze_problem.grid:
-      print("| {} {} {} {} |\n".format(row[0], row[1], row[2], row[3]))
+    print_grid(treasure_maze_problem.grid)
     tot_solution.append(solution)
   
   return tot_solution

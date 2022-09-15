@@ -30,8 +30,8 @@ def find_start(grid):
 	for i in range(len(grid)):
 		for j in range(len(grid[i])):
 			if grid[i][j] == 'S':
-				#if start_found:
-				#	raise Exception('ERROR! Found more than 1 start point: you can only have ONE start point')
+				if start_found:
+					raise Exception('ERROR! Found more than 1 start point: you can only have ONE start point')
 				initial_state = (i,j) 
 				start_found = True
 		
@@ -90,9 +90,9 @@ if __name__ == '__main__':
 		predicted.append(get_value_from_label(labels_table, class_digit))
 
 		# print image with relative predicted value
-		plt.imshow(image_value[i])
-		plt.show()
-		print(class_digit)
+		#plt.imshow(image_value[i])
+		#plt.show()
+		#print(class_digit)
 
 	n = int(math.sqrt(len(digits)))
 	grid = []
