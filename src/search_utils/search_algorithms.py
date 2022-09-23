@@ -4,6 +4,7 @@ import sys
 from search import Problem, Node
 from utils import PriorityQueue
 
+
 # hyp: state is an tuple with 2 elements: (row, column)
 class TreasureMazeProblem(Problem):
   def __init__(self, initial, grid, k, goal=None):
@@ -71,7 +72,7 @@ class TreasureMazeProblem(Problem):
       self.k = self.k - 1
       print("k:", self.k)
 
-    return self.grid[state[0]][state[1]] == 'T', self.k == 0
+    return self.grid[state[0]][state[1]] == 'T', self.k <= 0 #self.k == 0
 
   def path_cost(self, c, state1, action, state2):
     """ 
@@ -113,7 +114,7 @@ def calculate_heuristic_grid(treasure_maze_problem):
   if len(treasure_positions) == 0:
     # substitute with MAX_VALUE
     print('THERE ARE NO TREASURES!')
-    heuristic_grid = [[sys.maxint]*len(treasure_maze_problem.grid) for _ in range(len(treasure_maze_problem.grid[0]))]
+    heuristic_grid = [[sys.maxsize]*len(treasure_maze_problem.grid) for _ in range(len(treasure_maze_problem.grid[0]))]
   else:
     for i in range(len(treasure_maze_problem.grid)):
       row = []
@@ -151,8 +152,10 @@ def dijkstra(problem, f):
 
     current_node = frontier.pop()
     flag1, flag2 = problem.goal_test(current_node.state)
-    if flag1 == True:
+    if flag1:
       return flag2, current_node.solution()
+    if flag2:
+      return True, None
     
     explored.append(current_node.state)
     for action in problem.actions(current_node.state):

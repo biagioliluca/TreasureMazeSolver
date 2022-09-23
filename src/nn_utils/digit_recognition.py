@@ -101,6 +101,11 @@ def extract_and_preprocess(image_path):
     for j in range(len(digits[0])):
       x,y,w,h = digits[i][j]
       cropped_rect = negative[y:y+h, x:x+w]
+
+      if h >= w:
+        cropped_rect = cv2.copyMakeBorder(cropped_rect, 0, 0, int((h-w)/2), int((h-w)/2), cv2.BORDER_CONSTANT, value=(0,0,0))
+      else:
+        cropped_rect = cv2.copyMakeBorder(cropped_rect, int((w-h)/2), int((w-h)/2), 0, 0, cv2.BORDER_CONSTANT, value=(0,0,0))
       
       processed_digit = cv2.resize(cropped_rect,(20,20))
       processed_digit = cv2.copyMakeBorder(processed_digit, 4, 4, 4, 4, cv2.BORDER_CONSTANT, value=(0,0,0))
