@@ -92,7 +92,7 @@ if __name__ == '__main__':
 		# print image with relative predicted value
 		plt.imshow(image_value[i])
 		plt.show()
-		print(class_digit)
+		print(get_value_from_label(labels_table, class_digit))
 
 	n = int(math.sqrt(len(digits)))
 	grid = []

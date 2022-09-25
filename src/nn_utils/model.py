@@ -18,8 +18,6 @@ def create_model(num_classes):
     model.add(layers.Dense(512, activation='relu'))
     model.add(layers.Dense(512, activation='relu'))
     model.add(layers.Dense(512, activation='relu'))
-    model.add(layers.Dense(512, activation='relu'))
-    model.add(layers.Dense(512, activation='relu'))
     model.add(layers.Dense(num_classes, activation='softmax')) # output layer
 
     return model
