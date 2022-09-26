@@ -9,7 +9,7 @@ from tensorflow.keras.optimizers import SGD
 
 MODELS_PATH = os.path.join(Path(__file__).resolve().parent.parent.parent, 'models')
 
-EPOCHS = 16
+EPOCHS = 5
 BATCH_SIZE = 64
 LEARNING_R = 0.1
 DECAY_R = LEARNING_R / EPOCHS

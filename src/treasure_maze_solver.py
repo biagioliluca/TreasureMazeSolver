@@ -90,9 +90,9 @@ if __name__ == '__main__':
 		predicted.append(get_value_from_label(labels_table, class_digit))
 
 		# print image with relative predicted value
-		plt.imshow(image_value[i])
-		plt.show()
-		print(get_value_from_label(labels_table, class_digit))
+		#plt.imshow(image_value[i])
+		#plt.show()
+		#print(get_value_from_label(labels_table, class_digit))
 
 	n = int(math.sqrt(len(digits)))
 	grid = []
